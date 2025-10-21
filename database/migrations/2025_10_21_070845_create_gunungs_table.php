@@ -40,4 +40,3 @@ public function up()
         Schema::dropIfExists('gunungs');
     }
 };
-x`
