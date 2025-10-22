@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GunungController;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -10,7 +11,8 @@ Route::view('/', 'pages.home')->name('landing');
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::view('/dashboard', 'dashboard')->name('dashboard');
-    Route::view('/mountain', 'pages.mountain.index')->name('mountain.index');
+    Route::get('/mountain', [GunungController::class, 'index'])->name('mountain.index');
+    Route::get('/mountain/{id}', [GunungController::class, 'show'])->name('mountain.show');
     Route::view('/favorite', 'pages.favorite.index')->name('favorite.index');
 
     Route::get('/checkout', function () {

@@ -23,7 +23,7 @@
         <p class="text-red-600">Booking data not found.</p>
     @endif
 
-    <a href="{{ route('pesanan.index') }}" 
+    <a href="{{ route('checkout.index') }}" 
        class="inline-block bg-green-700 text-white px-5 py-2 mt-5 rounded-lg hover:bg-green-800">
        View My Ticket Booking
     </a>

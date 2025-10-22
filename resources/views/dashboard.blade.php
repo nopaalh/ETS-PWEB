@@ -6,8 +6,8 @@
     <h1 class="text-5xl font-extrabold text-green-900 drop-shadow-md">
         Selamat Datang di Pendakianku 🌄
     </h1>
-    <p class="mt-4 text-lg text-green-800/90 font-medium">
-        Jelajahi alam, pesan tiket pendakian, dan simpan gunung favoritmu 🌿
+    <p class="mt-4 text-lg text-black-800/90 font-medium">
+        Jelajahi alam, pesan tiket pendakian, dan simpan gunung favoritmu
     </p>
 
     <div class="mt-12 flex justify-center gap-6">
