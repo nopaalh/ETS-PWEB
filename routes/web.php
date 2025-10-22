@@ -2,15 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Halaman publik
+// page for public
 Route::view('/', 'pages.home')->name('landing');
-Route::view('/gunung', 'pages.gunung.index')->name('gunung.index');
-Route::view('/pesanan', 'pages.pesanan.index')->name('pesanan.index');
-Route::view('/favorit', 'pages.favorit.index')->name('favorit.index');
-Route::view('/riwayat', 'pages.riwayat.index')->name('riwayat.index');
 
-// Tambahkan route untuk dashboard di sini
-Route::view('/dashboard', 'dashboard')->name('dashboard');
+// page after login
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    Route::view('/dashboard', 'dashboard')->name('dashboard');
+    Route::view('/mountain', 'pages.mountain.index')->name('mountain.index');
+    Route::view('/checkout', 'pages.checkout.index')->name('checkout.index');
+    Route::view('/favorite', 'pages.favorite.index')->name('favorite.index');
+    Route::view('/history', 'pages.history.index')->name('history.index');
+});
 
 // Route default untuk login/register Breeze
 require __DIR__.'/auth.php';
