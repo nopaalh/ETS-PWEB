@@ -2,24 +2,34 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GunungController;
+use App\Http\Controllers\PesananTiketController;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-// page for public
+// Page for public
 Route::view('/', 'pages.home')->name('landing');
-// page after login
+
+// Page after login
 Route::middleware(['auth', 'verified'])->group(function () {
 
+    // Routes untuk semua user yang login
     Route::view('/dashboard', 'dashboard')->name('dashboard');
     Route::get('/mountain', [GunungController::class, 'index'])->name('mountain.index');
     Route::get('/mountain/{id}', [GunungController::class, 'show'])->name('mountain.show');
     Route::view('/favorite', 'pages.favorite.index')->name('favorite.index');
+    Route::view('/history', 'pages.history.index')->name('history.index');
 
+    // Pesanan Tiket routes
+    Route::resource('pesanan', PesananTiketController::class);
+
+    // Checkout routes
     Route::get('/checkout', function () {
         $bookings = session('bookings', []);
         return view('pages.checkout.index', compact('bookings'));
     })->name('checkout.index');
+
     Route::view('/checkout/create', 'pages.checkout.create')->name('checkout.create');
+
     Route::post('/checkout/store', function (Request $request) {
         $request->validate([
             'name' => 'required',
@@ -34,6 +44,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'amount' => 'required|numeric|min:1',
             'proof' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
+
         $bookingCode = 'BK' . strtoupper(uniqid());
         $bookings = session('bookings', []);
 
@@ -55,7 +66,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return redirect()->route('checkout.success')->with('booking', $newBooking);
     })->name('checkout.store');
 
-    // 🔹 Booking success page
+    // Booking success page
     Route::get('/checkout/success', function (Request $request) {
         $booking = session('booking');
 
@@ -71,7 +82,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('pages.checkout.success', compact('booking'));
     })->name('checkout.success');
 
-    // 🔹 Edit booking
+    // Edit booking
     Route::get('/checkout/edit/{code}', function ($code) {
         $bookings = session('bookings', []);
         if (!isset($bookings[$code])) {
@@ -97,7 +108,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return redirect()->route('checkout.index')->with('success', 'Booking updated successfully.');
     })->name('checkout.update');
 
-    // 🔹 Cancel booking with refund & reason (2-step)
+    // Cancel booking with refund & reason (2-step)
     Route::get('/checkout/cancel/{code}', function ($code) {
         $bookings = session('bookings', []);
         if (!isset($bookings[$code])) {
@@ -124,8 +135,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return redirect()->route('checkout.index')->with('success', 'Booking cancelled with partial refund.');
     })->name('checkout.cancel.process');
 
-    Route::view('/history', 'pages.history.index')->name('history.index');
+    // 🔹 ROUTES ADMIN ONLY - TAMBAHKAN INI
+    Route::middleware(['admin'])->group(function () {
+        // Route test admin
+        Route::get('/admin-test', function () {
+            return "🎉 HALO ADMIN! Middleware berhasil!";
+        })->name('admin.test');
+
+        // Routes untuk manage gunung (admin only)
+        Route::get('/admin/gunungs/create', [GunungController::class, 'create'])->name('admin.gunungs.create');
+        Route::post('/admin/gunungs', [GunungController::class, 'store'])->name('admin.gunungs.store');
+        Route::get('/admin/gunungs/{gunung}/edit', [GunungController::class, 'edit'])->name('admin.gunungs.edit');
+        Route::put('/admin/gunungs/{gunung}', [GunungController::class, 'update'])->name('admin.gunungs.update');
+        Route::delete('/admin/gunungs/{gunung}', [GunungController::class, 'destroy'])->name('admin.gunungs.destroy');
+        Route::get('/admin/dashboard', [GunungController::class, 'dashboard'])->name('admin.dashboard');
+    });
 });
 
-// 🔹 Auth routes (from Breeze)
+// Auth routes (from Breeze)
 require __DIR__.'/auth.php';

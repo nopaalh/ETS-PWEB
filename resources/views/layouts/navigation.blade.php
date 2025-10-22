@@ -17,22 +17,28 @@
         {{-- Menu navigasi --}}
         <div class="hidden md:flex space-x-8 font-medium text-gray-700">
             @auth
-                <a href="{{ route('mountain.index') }}" 
+                <a href="{{ route('mountain.index') }}"
                    class="{{ request()->is('mountain*') ? 'text-green-700 font-semibold' : 'hover:text-green-700 transition' }}">
                     Mountains
                 </a>
-                <a href="{{ route('checkout.index') }}" 
+                <a href="{{ route('checkout.index') }}"
                    class="{{ request()->is('checkout*') ? 'text-green-700 font-semibold' : 'hover:text-green-700 transition' }}">
                     Ticket
                 </a>
-                <a href="{{ route('favorite.index') }}" 
+                <a href="{{ route('favorite.index') }}"
                    class="{{ request()->is('favorite*') ? 'text-green-700 font-semibold' : 'hover:text-green-700 transition' }}">
                     Favorite
                 </a>
-                <a href="{{ route('history.index') }}" 
+                <a href="{{ route('history.index') }}"
                    class="{{ request()->is('history*') ? 'text-green-700 font-semibold' : 'hover:text-green-700 transition' }}">
                     History
                 </a>
+                @if(auth()->user()->role === 'admin')
+                    <a href="{{ route('admin.dashboard') }}"
+                       class="{{ request()->is('admin*') ? 'text-green-700 font-semibold' : 'hover:text-green-700 transition' }}">
+                        Admin
+                    </a>
+                @endif
             @endauth
         </div>
 
