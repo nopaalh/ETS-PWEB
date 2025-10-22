@@ -50,7 +50,7 @@
                            class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">
                             Edit
                         </a>
-                        <button onclick="openCancelModal('{{ $booking['code'] }}')" 
+                        <button onclick="openCancel('{{ $booking['code'] }}')" 
                                 class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
                             Cancel
                         </button>
@@ -63,19 +63,18 @@
     @endif
 </div>
 
-<!-- 🔹 Modal Alasan Pembatalan -->
-<div id="cancelModal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+<div id="Cancel" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
     <div class="bg-white rounded-lg p-6 w-96 shadow-lg">
-        <h2 class="text-lg font-semibold mb-2">Batalkan checkout</h2>
-        <p class="text-sm text-gray-600 mb-4">Berikan alasan pembatalan dan setujui pengembalian 70%.</p>
+        <h2 class="text-lg font-semibold mb-2">Cancel Booking</h2>
+        <p class="text-sm text-gray-600 mb-4">Provide a reason for cancellation and agree to a 70% refund.</p>
         <form id="cancelForm" method="POST">
             @csrf
             <textarea name="reason" rows="3" class="w-full border rounded p-2 mb-3" 
-                      placeholder="Alasan pembatalan..." required></textarea>
+                      placeholder="Reason for cancellation..." required></textarea>
             <div class="flex justify-end gap-2">
-                <button type="button" onclick="closeCancelModal()" class="px-3 py-1 border rounded">Batal</button>
+                <button type="button" onclick="closeCancel()" class="px-3 py-1 border rounded">Cancelled</button>
                 <button type="submit" class="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700">
-                    Konfirmasi
+                    Confirm
                 </button>
             </div>
         </form>
@@ -83,12 +82,12 @@
 </div>
 
 <script>
-function openCancelModal(code) {
-    document.getElementById('cancelModal').classList.remove('hidden');
-    document.getElementById('cancelForm').action = '/checkout/delete/' + code;
+function openCancel(code) {
+    document.getElementById('Cancel').classList.remove('hidden');
+    document.getElementById('cancelForm').action = '/checkout/cancel/' + code;
 }
-function closeCancelModal() {
-    document.getElementById('cancelModal').classList.add('hidden');
+function closeCancel() {
+    document.getElementById('Cancel').classList.add('hidden');
 }
 </script>
 @endsection

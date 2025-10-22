@@ -28,7 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'email' => 'required|email',
             'mountain_id' => 'required',
             'date' => 'required|date',
-            'A' => 'required|numeric|min:1',
+            'climber' => 'required|numeric|min:1',
             'duration' => 'required|numeric|min:1',
             'metode' => 'required',
             'amount' => 'required|numeric|min:1',
@@ -42,7 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'name' => $request->name,
             'mountain_id' => $request->mountain_id,
             'date' => $request->date,
-            'A' => $request->A,
+            'climber' => $request->climber,
             'duration' => $request->duration,
             'metode' => $request->metode,
             'amount' => $request->amount,
@@ -89,7 +89,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         $bookings[$code]['name'] = $request->name;
         $bookings[$code]['date'] = $request->date;
-        $bookings[$code]['A'] = $request->A;
+        $bookings[$code]['climber'] = $request->climber;
         $bookings[$code]['duration'] = $request->duration;
         $bookings[$code]['amount'] = $request->amount;
         session()->put('bookings', $bookings);
@@ -114,10 +114,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             return redirect()->route('checkout.index')->with('error', 'Booking not found.');
         }
 
-        $refundRate = 0.7; // 70% refund
+        $refundRate = 0.7; 
         $bookings[$code]['status'] = 'Cancelled';
         $bookings[$code]['reason'] = $request->reason;
-        $bookings[$code]['refund'] = $bookings[$code]['amount'] * $refundRate;
+        $bookings[$code]['refund'] = round($bookings[$code]['amount'] * $refundRate, 0);
         $bookings[$code]['refund_rate'] = $refundRate * 100;
 
         session()->put('bookings', $bookings);

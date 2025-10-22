@@ -20,7 +20,7 @@
 
         <div class="mb-4">
             <label class="block font-medium">Number of Climbers</label>
-            <input type="number" name="A" value="{{ $booking['A'] }}" class="w-full border rounded p-2">
+            <input type="number" name="climber" value="{{ $booking['climber'] }}" class="w-full border rounded p-2">
         </div>
 
         <div class="mb-4">

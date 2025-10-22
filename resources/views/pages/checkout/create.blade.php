@@ -68,10 +68,10 @@
 
                 <div>
                     <label class="block mb-1 font-medium">Number of Climbers <span class="text-red-500">*</span></label>
-                    <input type="number" name="A" value="{{ old('A') }}" min="1"
-                        class="w-full border rounded p-2 @error('A') border-red-500 @enderror" 
+                    <input type="number" name="climber" value="{{ old('climber') }}" min="1"
+                        class="w-full border rounded p-2 @error('climber') border-red-500 @enderror" 
                         placeholder="Number of People">
-                    @error('A') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+                    @error('climber') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
