@@ -3,26 +3,62 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GunungController;
 use App\Http\Controllers\PesananTiketController;
+use App\Http\Controllers\FavoriteController;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-// Page for public
+/*
+|--------------------------------------------------------------------------
+| 🌍 HALAMAN PUBLIC
+|--------------------------------------------------------------------------
+*/
 Route::view('/', 'pages.home')->name('landing');
 
-// Page after login
+/*
+|--------------------------------------------------------------------------
+| 🔐 HALAMAN UNTUK USER YANG LOGIN
+|--------------------------------------------------------------------------
+*/
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    // Routes untuk semua user yang login
+    // Dashboard utama user
     Route::view('/dashboard', 'dashboard')->name('dashboard');
+
+    /*
+    |--------------------------------------------------------------------------
+    | 🏔️ GUNUNG ROUTES
+    |--------------------------------------------------------------------------
+    */
     Route::get('/mountain', [GunungController::class, 'index'])->name('mountain.index');
     Route::get('/mountain/{id}', [GunungController::class, 'show'])->name('mountain.show');
-    Route::view('/favorite', 'pages.favorite.index')->name('favorite.index');
+
+    /*
+    |--------------------------------------------------------------------------
+    | 💚 FAVORITE ROUTES
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/favorite', [FavoriteController::class, 'index'])->name('favorite.index');
+    Route::post('/favorite/toggle/{gunung}', [FavoriteController::class, 'toggle'])->name('favorite.toggle');
+
+    /*
+    |--------------------------------------------------------------------------
+    | 🕒 HISTORY ROUTES
+    |--------------------------------------------------------------------------
+    */
     Route::view('/history', 'pages.history.index')->name('history.index');
 
-    // Pesanan Tiket routes
+    /*
+    |--------------------------------------------------------------------------
+    | 🎟️ PESANAN TIKET ROUTES
+    |--------------------------------------------------------------------------
+    */
     Route::resource('pesanan', PesananTiketController::class);
 
-    // Checkout routes
+    /*
+    |--------------------------------------------------------------------------
+    | 💰 CHECKOUT ROUTES
+    |--------------------------------------------------------------------------
+    */
     Route::get('/checkout', function () {
         $bookings = session('bookings', []);
         return view('pages.checkout.index', compact('bookings'));
@@ -66,7 +102,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return redirect()->route('checkout.success')->with('booking', $newBooking);
     })->name('checkout.store');
 
-    // Booking success page
+    // ✅ Halaman sukses booking
     Route::get('/checkout/success', function (Request $request) {
         $booking = session('booking');
 
@@ -82,7 +118,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('pages.checkout.success', compact('booking'));
     })->name('checkout.success');
 
-    // Edit booking
+    // ✏️ Edit booking
     Route::get('/checkout/edit/{code}', function ($code) {
         $bookings = session('bookings', []);
         if (!isset($bookings[$code])) {
@@ -108,7 +144,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return redirect()->route('checkout.index')->with('success', 'Booking updated successfully.');
     })->name('checkout.update');
 
-    // Cancel booking with refund & reason (2-step)
+    // ❌ Cancel booking (2-step)
     Route::get('/checkout/cancel/{code}', function ($code) {
         $bookings = session('bookings', []);
         if (!isset($bookings[$code])) {
@@ -125,7 +161,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             return redirect()->route('checkout.index')->with('error', 'Booking not found.');
         }
 
-        $refundRate = 0.7; 
+        $refundRate = 0.7;
         $bookings[$code]['status'] = 'Cancelled';
         $bookings[$code]['reason'] = $request->reason;
         $bookings[$code]['refund'] = round($bookings[$code]['amount'] * $refundRate, 0);
@@ -135,14 +171,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return redirect()->route('checkout.index')->with('success', 'Booking cancelled with partial refund.');
     })->name('checkout.cancel.process');
 
-    // 🔹 ROUTES ADMIN ONLY - TAMBAHKAN INI
+    /*
+    |--------------------------------------------------------------------------
+    | 👑 ADMIN ROUTES
+    |--------------------------------------------------------------------------
+    */
     Route::middleware(['admin'])->group(function () {
-        // Route test admin
+        // Testing middleware admin
         Route::get('/admin-test', function () {
             return "🎉 HALO ADMIN! Middleware berhasil!";
         })->name('admin.test');
 
-        // Routes untuk manage gunung (admin only)
+        // CRUD data gunung
         Route::get('/admin/gunungs/create', [GunungController::class, 'create'])->name('admin.gunungs.create');
         Route::post('/admin/gunungs', [GunungController::class, 'store'])->name('admin.gunungs.store');
         Route::get('/admin/gunungs/{gunung}/edit', [GunungController::class, 'edit'])->name('admin.gunungs.edit');
@@ -152,5 +192,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 });
 
-// Auth routes (from Breeze)
+/*
+|--------------------------------------------------------------------------
+| 🔑 AUTH ROUTES (BREEZE)
+|--------------------------------------------------------------------------
+*/
 require __DIR__.'/auth.php';

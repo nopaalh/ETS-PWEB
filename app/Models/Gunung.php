@@ -21,4 +21,16 @@ class Gunung extends Model
         'kuota_harian',
         'status'
     ];
+
+    // 🔹 Relasi ke tabel favorites (1 gunung bisa difavoritkan banyak user)
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    // 🔹 Relasi many-to-many ke user lewat tabel favorites
+    public function favoredByUsers()
+    {
+        return $this->belongsToMany(User::class, 'favorites');
+    }
 }
