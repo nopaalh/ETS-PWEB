@@ -36,7 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Admin area
     Route::middleware(['admin'])->group(function () {
-        Route::get('/admin-test', fn() => "🎉 HALO ADMIN! Middleware berhasil!")->name('admin.test');
+        Route::get('/admin-test', fn() => " HALO ADMIN! Middleware berhasil!")->name('admin.test');
 
         Route::get('/admin/gunungs/create', [GunungController::class, 'create'])->name('admin.gunungs.create');
         Route::post('/admin/gunungs', [GunungController::class, 'store'])->name('admin.gunungs.store');
