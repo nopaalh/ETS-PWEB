@@ -31,19 +31,11 @@
             <tbody>
                 @foreach($bookings as $booking)
                 <tr class="border-t hover:bg-gray-100">
-<<<<<<< Updated upstream
-                    <td class="p-2">{{ $booking['code'] }}</td>
-                    <td class="p-2">{{ $booking['name'] }}</td>
-                    <td class="p-2">{{ $booking['date'] }}</td>
-                    <td class="p-2 {{ $booking['status'] == 'Cancelled' ? 'text-red-600' : 'text-green-700' }}">
-                        {{ $booking['status'] }}
-=======
                     <td class="p-2">{{ $booking->kode_booking }}</td>
                     <td class="p-2">{{ $booking->nama_pendaki }}</td>
                     <td class="p-2">{{ $booking->tanggal_pendakian->format('d/m/Y') }}</td>
                     <td class="p-2 {{ $booking->status_pembayaran == 'dibatalkan' ? 'text-red-600' : 'text-green-700' }}">
                         {{ ucfirst($booking->status_pembayaran) }}
->>>>>>> Stashed changes
                     </td>
                     <td class="p-2">
                         @if($booking->jumlah_refund)
@@ -53,24 +45,12 @@
                         @endif
                     </td>
                     <td class="p-2 flex gap-2 justify-center">
-<<<<<<< Updated upstream
-                        {{-- Detail --}}
-                        <a href="{{ route('checkout.show', $booking['code']) }}" 
-                           class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
-                            Detail
-                        </a>
-
-                        {{-- Edit & Cancel muncul hanya kalau belum dibatalkan --}}
-                        @if($booking['status'] !== 'Cancelled')
-                        <button onclick="openCancel('{{ $booking['code'] }}')" 
-=======
                         @if($booking->status_pembayaran !== 'dibatalkan')
                         <a href="{{ route('checkout.edit', $booking->kode_booking) }}"
                            class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">
                             Edit
                         </a>
                         <button onclick="openCancel('{{ $booking->kode_booking }}')"
->>>>>>> Stashed changes
                                 class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
                             Cancel
                         </button>
