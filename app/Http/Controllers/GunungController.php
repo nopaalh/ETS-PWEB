@@ -118,11 +118,11 @@ class GunungController extends Controller
         $gunungAktif = Gunung::where('status', 'active')->count();
         $totalBookings = PesananTiket::count();
         $pendingBookings = PesananTiket::where('status_pembayaran', 'menunggu')->count();
-        $recentBookings = PesananTiket::with('gunung')
+        $pendingBookingsList = PesananTiket::where('status_pembayaran', 'menunggu')
+            ->with('gunung')
             ->orderBy('created_at', 'desc')
-            ->limit(10)
             ->get();
 
-        return view('admin.dashboard', compact('totalGunung', 'gunungAktif', 'totalBookings', 'pendingBookings', 'recentBookings'));
+        return view('admin.dashboard', compact('totalGunung', 'gunungAktif', 'totalBookings', 'pendingBookings', 'pendingBookingsList'));
     }
 }

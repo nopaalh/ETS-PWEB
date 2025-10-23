@@ -44,11 +44,11 @@
         </div>
     </div>
 
-    <!-- Recent Bookings Table -->
+    <!-- Pending Bookings Table -->
     <div class="bg-white rounded-2xl shadow-md p-6 mb-10">
-        <h2 class="text-2xl font-bold text-green-900 mb-6">Booking Terbaru</h2>
+        <h2 class="text-2xl font-bold text-green-900 mb-6">Transaksi Menunggu Konfirmasi</h2>
 
-        @if($recentBookings->count() > 0)
+        @if($pendingBookingsList->count() > 0)
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead class="bg-green-50">
@@ -57,38 +57,38 @@
                             <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Nama Pendaki</th>
                             <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Gunung</th>
                             <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Tanggal</th>
-                            <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Status</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Total Harga</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Bukti Bayar</th>
                             <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
-                        @foreach($recentBookings as $booking)
+                        @foreach($pendingBookingsList as $booking)
                         <tr class="hover:bg-gray-50">
                             <td class="px-4 py-3 text-sm font-medium">{{ $booking->kode_booking }}</td>
                             <td class="px-4 py-3 text-sm">{{ $booking->nama_pendaki }}</td>
                             <td class="px-4 py-3 text-sm">{{ $booking->gunung->nama_gunung }}</td>
                             <td class="px-4 py-3 text-sm">{{ $booking->tanggal_pendakian->format('d/m/Y') }}</td>
+                            <td class="px-4 py-3 text-sm">Rp {{ number_format($booking->total_harga, 0, ',', '.') }}</td>
                             <td class="px-4 py-3 text-sm">
-                                <span class="px-2 py-1 text-xs rounded-full
-                                    @if($booking->status_pembayaran == 'menunggu') bg-yellow-100 text-yellow-800
-                                    @elseif($booking->status_pembayaran == 'sukses') bg-green-100 text-green-800
-                                    @elseif($booking->status_pembayaran == 'dibatalkan') bg-red-100 text-red-800
-                                    @else bg-gray-100 text-gray-800 @endif">
-                                    {{ ucfirst($booking->status_pembayaran) }}
-                                </span>
+                                @if($booking->bukti_pembayaran)
+                                    <a href="{{ asset('storage/' . $booking->bukti_pembayaran) }}"
+                                       target="_blank"
+                                       class="text-blue-600 hover:text-blue-800 underline">
+                                        Lihat Bukti
+                                    </a>
+                                @else
+                                    <span class="text-gray-500">Tidak ada</span>
+                                @endif
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                @if($booking->status_pembayaran == 'menunggu')
-                                    <form method="POST" action="{{ route('admin.checkout.update-status', $booking->kode_booking) }}" class="inline">
-                                        @csrf
-                                        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs"
-                                                onclick="return confirm('Apakah Anda yakin ingin menyetujui pembayaran ini?')">
-                                            Setujui
-                                        </button>
-                                    </form>
-                                @else
-                                    <span class="text-gray-500 text-xs">-</span>
-                                @endif
+                                <form method="POST" action="{{ route('admin.checkout.update-status', $booking->kode_booking) }}" class="inline">
+                                    @csrf
+                                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs"
+                                            onclick="return confirm('Apakah Anda yakin ingin menyetujui pembayaran ini?')">
+                                        Setujui
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         @endforeach
@@ -96,7 +96,7 @@
                 </table>
             </div>
         @else
-            <p class="text-gray-500 text-center py-8">Belum ada booking.</p>
+            <p class="text-gray-500 text-center py-8">Tidak ada transaksi yang menunggu konfirmasi.</p>
         @endif
     </div>
 
