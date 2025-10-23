@@ -1,5 +1,5 @@
 @extends('layouts.landing')
-@section('title', 'MyClimb')
+@section('title', 'Pendakianku')
 
 @section('content')
 <div class="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden">
@@ -17,7 +17,7 @@
             Adventure Starts Here
         </h1>
         <p class="mt-5 text-lg md:text-xl text-gray-200 max-w-2xl mx-auto">
-            Explore the best mountains in Indonesia and find your next journey with MyClimb 🌄
+            Explore the best mountains in Indonesia and find your next journey with Pendakianku 🌄
         </p>
 
         <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
@@ -34,7 +34,7 @@
 
     <!-- Footer -->
     <footer class="absolute bottom-0 w-full text-center text-gray-200 text-sm pb-4">
-        © 2025 MyClimb | Made with 💚 by WebPro Team
+        © 2025 Pendakianku | Made with 💚 by WebPro Team
     </footer>
 </div>
 @endsection

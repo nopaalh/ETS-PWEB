@@ -5,11 +5,11 @@
         <div>
             @auth
                 <a href="{{ route('dashboard') }}" class="text-2xl font-bold text-green-800 flex items-center gap-1">
-                    🌿 <span>MyClimb</span>
+                    🌿 <span>Pendakianku</span>
                 </a>
             @else
                 <a href="{{ route('landing') }}" class="text-2xl font-bold text-green-800 flex items-center gap-1">
-                    🌿 <span>MyClimb</span>
+                    🌿 <span>Pendakianku</span>
                 </a>
             @endauth
         </div>

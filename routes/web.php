@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GunungController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\HistoryController;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -45,7 +46,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     | 🕒 HISTORY ROUTES
     |--------------------------------------------------------------------------
     */
-    Route::view('/history', 'pages.history.index')->name('history.index');
+    Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
 
     /*
     |--------------------------------------------------------------------------
