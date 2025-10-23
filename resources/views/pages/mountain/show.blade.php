@@ -27,10 +27,9 @@
     <div class="flex justify-center gap-6 mb-10">
         <a href="{{ route('checkout.create') }}"
            class="bg-green-700 hover:bg-green-800 text-white px-6 py-3 rounded-full text-lg shadow-md transition transform hover:scale-105">
-            Book Ticket 🎫
+            Book Ticket
         </a>
 
-        {{-- Button Favorite dengan Toggle --}}
         <form action="{{ route('favorite.toggle', $gunung->id) }}" method="POST">
             @csrf
             @php

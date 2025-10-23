@@ -5,16 +5,15 @@
         <div>
             @auth
                 <a href="{{ route('dashboard') }}" class="text-2xl font-bold text-green-800 flex items-center gap-1">
-                    🌿 <span>Pendakianku</span>
+                    <span>MyClimb</span>
                 </a>
             @else
                 <a href="{{ route('landing') }}" class="text-2xl font-bold text-green-800 flex items-center gap-1">
-                    🌿 <span>Pendakianku</span>
+                    <span>MyClimb</span>
                 </a>
             @endauth
         </div>
 
-        {{-- Menu navigasi --}}
         <div class="hidden md:flex space-x-8 font-medium text-gray-700">
             @auth
                 <a href="{{ route('mountain.index') }}"

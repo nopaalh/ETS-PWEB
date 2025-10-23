@@ -45,25 +45,16 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Relasi ke Favorites
-     */
     public function favorites()
     {
         return $this->hasMany(Favorite::class);
     }
 
-    /**
-     * Cek apakah gunung sudah difavoritkan
-     */
     public function hasFavorited($gunungId)
     {
         return $this->favorites()->where('gunung_id', $gunungId)->exists();
     }
 
-    /**
-     * Get all favorite gunungs
-     */
     public function favoriteGunungs()
     {
         return $this->hasManyThrough(Gunung::class, Favorite::class, 'user_id', 'id', 'id', 'gunung_id');

@@ -14,26 +14,17 @@ class GunungController extends Controller
         $this->middleware('admin')->only(['create', 'store', 'edit', 'update', 'destroy', 'dashboard']);
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $gunungs = Gunung::all();
         return view('pages.mountain.index', compact('gunungs'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('admin.gunungs.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -51,30 +42,21 @@ class GunungController extends Controller
         Gunung::create($validated);
 
         return redirect()->route('admin.dashboard')
-            ->with('success', 'Gunung berhasil ditambahkan!');
+            ->with('success', 'Mountain successfully added!');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
         $gunung = Gunung::findOrFail($id);
         return view('pages.mountain.show', compact('gunung'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
         $gunung = Gunung::findOrFail($id);
         return view('admin.gunungs.edit', compact('gunung'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
         $gunung = Gunung::findOrFail($id);
@@ -94,24 +76,18 @@ class GunungController extends Controller
         $gunung->update($validated);
 
         return redirect()->route('admin.dashboard')
-            ->with('success', 'Gunung berhasil diupdate!');
+            ->with('success', 'The mountain has been successfully updated!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
         $gunung = Gunung::findOrFail($id);
         $gunung->delete();
 
         return redirect()->route('mountain.index')
-            ->with('success', 'Gunung berhasil dihapus!');
+            ->with('success', 'The mountain was successfully removed!');
     }
 
-    /**
-     * Admin Dashboard
-     */
     public function dashboard()
     {
         $totalGunung = Gunung::count();

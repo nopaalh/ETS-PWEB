@@ -8,27 +8,18 @@ use App\Models\Gunung;
 
 class PesananTiketController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $pesananTikets = PesananTiket::where('user_id', auth()->id())->get();
         return view('pesanan.index', compact('pesananTikets'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $gunungs = Gunung::where('status', 'active')->get();
         return view('pesanan.create', compact('gunungs'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -39,21 +30,17 @@ class PesananTiketController extends Controller
             'metode_bayar' => 'required|in:transfer,cash',
         ]);
 
-        // Cek kuota tersedia
         $gunung = Gunung::findOrFail($validated['gunung_id']);
 
-        // Hitung total tiket yang sudah dipesan untuk tanggal tersebut
         $existingBookings = PesananTiket::where('gunung_id', $validated['gunung_id'])
             ->where('tanggal_naik', $validated['tanggal_naik'])
             ->whereIn('status', ['pending', 'confirmed'])
             ->sum('jumlah_tiket');
 
-        // Cek apakah kuota mencukupi
         if ($existingBookings + $validated['jumlah_tiket'] > $gunung->kuota_harian) {
-            return back()->withErrors(['jumlah_tiket' => 'Kuota tiket untuk tanggal tersebut tidak mencukupi.']);
+            return back()->withErrors(['jumlah_tiket' => 'The ticket quota for that date is insufficient.']);
         }
 
-        // Buat pesanan tiket
         PesananTiket::create([
             'user_id' => auth()->id(),
             'gunung_id' => $validated['gunung_id'],
@@ -64,21 +51,15 @@ class PesananTiketController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->route('pesanan.index')->with('success', 'Pesanan tiket berhasil dibuat.');
+        return redirect()->route('pesanan.index')->with('success', 'Ticket order successfully created.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $pesananTiket = PesananTiket::where('user_id', auth()->id())->findOrFail($id);
         return view('pesanan.show', compact('pesananTiket'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $pesananTiket = PesananTiket::where('user_id', auth()->id())->findOrFail($id);
@@ -86,9 +67,6 @@ class PesananTiketController extends Controller
         return view('pesanan.edit', compact('pesananTiket', 'gunungs'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $pesananTiket = PesananTiket::where('user_id', auth()->id())->findOrFail($id);
@@ -101,7 +79,6 @@ class PesananTiketController extends Controller
             'metode_bayar' => 'required|in:transfer,cash',
         ]);
 
-        // Cek kuota tersedia jika ada perubahan
         $gunung = Gunung::findOrFail($validated['gunung_id']);
 
         $existingBookings = PesananTiket::where('gunung_id', $validated['gunung_id'])
@@ -111,22 +88,19 @@ class PesananTiketController extends Controller
             ->sum('jumlah_tiket');
 
         if ($existingBookings + $validated['jumlah_tiket'] > $gunung->kuota_harian) {
-            return back()->withErrors(['jumlah_tiket' => 'Kuota tiket untuk tanggal tersebut tidak mencukupi.']);
+            return back()->withErrors(['jumlah_tiket' => 'The ticket quota for that date is insufficient.']);
         }
 
         $pesananTiket->update($validated);
 
-        return redirect()->route('pesanan.index')->with('success', 'Pesanan tiket berhasil diupdate.');
+        return redirect()->route('pesanan.index')->with('success', 'Ticket order successfully updated.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $pesananTiket = PesananTiket::where('user_id', auth()->id())->findOrFail($id);
         $pesananTiket->delete();
 
-        return redirect()->route('pesanan.index')->with('success', 'Pesanan tiket berhasil dihapus.');
+        return redirect()->route('pesanan.index')->with('success', 'Ticket order successfully deleted.');
     }
 }

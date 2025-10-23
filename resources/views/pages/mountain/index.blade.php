@@ -2,16 +2,16 @@
 @section('title', 'Daftar Gunung')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-b from-green-50 to-white py-12">
+<div class="py-12">
     <div class="max-w-7xl mx-auto px-4">
         
         {{-- Header --}}
         <div class="text-center mb-12">
             <h1 class="text-5xl font-[Playfair_Display] font-bold text-green-900 mb-4">
-                Mountain List 🏔️
+                Mountain List
             </h1>
             <p class="text-gray-600 text-lg">
-                Find the mountain you want to explore 🌿
+                Find the mountain you want to explore
             </p>
         </div>
 

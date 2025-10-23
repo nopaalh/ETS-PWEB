@@ -34,25 +34,16 @@ class PesananTiket extends Model
         'tanggal_pembatalan' => 'datetime',
     ];
 
-    /**
-     * Relasi ke User
-     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Relasi ke Gunung
-     */
     public function gunung()
     {
         return $this->belongsTo(Gunung::class);
     }
 
-    /**
-     * Generate kode booking unik
-     */
     public static function generateKodeBooking()
     {
         do {
@@ -62,9 +53,6 @@ class PesananTiket extends Model
         return $kode;
     }
 
-    /**
-     * Hitung total harga
-     */
     public function hitungTotalHarga()
     {
         $hargaTiket = $this->gunung->harga_tiket;
@@ -72,25 +60,16 @@ class PesananTiket extends Model
         return $this->total_harga;
     }
 
-    /**
-     * Hitung refund 70%
-     */
     public function hitungRefund()
     {
         return $this->total_harga * 0.7;
     }
 
-    /**
-     * Scope untuk filter berdasarkan user
-     */
     public function scopeByUser($query, $userId)
     {
         return $query->where('user_id', $userId);
     }
 
-    /**
-     * Scope untuk filter berdasarkan status
-     */
     public function scopeByStatus($query, $status)
     {
         return $query->where('status_pembayaran', $status);

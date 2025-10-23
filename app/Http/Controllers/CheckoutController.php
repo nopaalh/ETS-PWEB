@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\PesananTiket;
 use App\Models\Gunung;
 use Illuminate\Http\Request;
@@ -12,9 +11,6 @@ use Carbon\Carbon;
 
 class CheckoutController extends Controller
 {
-    /**
-     * Display a listing of user's bookings
-     */
     public function index()
     {
         $bookings = PesananTiket::byUser(Auth::id())
@@ -25,18 +21,12 @@ class CheckoutController extends Controller
         return view('pages.checkout.index', compact('bookings'));
     }
 
-    /**
-     * Show the form for creating a new booking
-     */
     public function create()
     {
         $gunungs = Gunung::all();
         return view('pages.checkout.create', compact('gunungs'));
     }
 
-    /**
-     * Store a newly created booking
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -53,13 +43,8 @@ class CheckoutController extends Controller
             'proof' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
-        // Upload bukti pembayaran
-        $buktiPath = null;
-        if ($request->hasFile('proof')) {
-            $buktiPath = $request->file('proof')->store('bukti-pembayaran', 'public');
-        }
+        $buktiPath = $request->file('proof')->store('bukti-pembayaran', 'public');
 
-        // Buat pesanan baru
         $pesanan = new PesananTiket();
         $pesanan->kode_booking = PesananTiket::generateKodeBooking();
         $pesanan->user_id = Auth::id();
@@ -81,9 +66,6 @@ class CheckoutController extends Controller
                         ->with('success', 'Pesanan berhasil dibuat! Kode booking: ' . $pesanan->kode_booking);
     }
 
-    /**
-     * Display the success page
-     */
     public function success($kodeBooking)
     {
         $booking = PesananTiket::where('kode_booking', $kodeBooking)
@@ -93,9 +75,6 @@ class CheckoutController extends Controller
         return view('pages.checkout.success', compact('booking'));
     }
 
-    /**
-     * Show the form for editing a booking
-     */
     public function edit($kodeBooking)
     {
         $booking = PesananTiket::where('kode_booking', $kodeBooking)
@@ -103,18 +82,16 @@ class CheckoutController extends Controller
                                ->with('gunung')
                                ->firstOrFail();
 
-        // Cek apakah masih bisa diedit (belum dibatalkan)
+        $gunungs = Gunung::all();
+
         if ($booking->status_pembayaran === 'cancelled') {
             return redirect()->route('checkout.index')
-                           ->with('error', 'Pesanan yang sudah dibatalkan tidak bisa diedit!');
+                            ->with('error', 'Pesanan yang sudah dibatalkan tidak bisa diedit!');
         }
 
-        return view('pages.checkout.edit', compact('booking'));
+        return view('pages.checkout.edit', compact('booking', 'gunungs'));
     }
 
-    /**
-     * Update the specified booking
-     */
     public function update(Request $request, $kodeBooking)
     {
         $booking = PesananTiket::where('kode_booking', $kodeBooking)
@@ -122,20 +99,36 @@ class CheckoutController extends Controller
                                ->firstOrFail();
 
         $validated = $request->validate([
-            'date' => 'required|date|after:' . $booking->tanggal_pendakian,
+            'mountain_id' => 'required|exists:gunungs,id',
+            'date' => 'required|date|after:today',
+            'climber' => 'required|integer|min:1',
+            'duration' => 'required|integer|min:1',
+            'metode' => 'required|in:BCA,BRI',
+            'amount' => 'required|numeric|min:1',
+            'proof' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048', 
         ]);
 
-        // Update hanya tanggal pendakian (hanya bisa diundur)
-        $booking->tanggal_pendakian = $validated['date'];
-        $booking->save();
+        if ($booking->bukti_pembayaran) {
+            Storage::disk('public')->delete($booking->bukti_pembayaran);
+        }
+
+        $buktiPath = $request->file('proof')->store('bukti-pembayaran', 'public');
+
+        $booking->update([
+            'gunung_id' => $validated['mountain_id'],
+            'tanggal_pendakian' => $validated['date'],
+            'jumlah_pendaki' => $validated['climber'],
+            'durasi_hari' => $validated['duration'],
+            'metode_pembayaran' => $validated['metode'],
+            'total_harga' => $validated['amount'],
+            'bukti_pembayaran' => $buktiPath,
+            'status_pembayaran' => 'pending', 
+        ]);
 
         return redirect()->route('checkout.index')
-                        ->with('success', 'Tanggal pendakian berhasil diperbarui!');
+                        ->with('success', 'Booking berhasil diperbarui! Bukti pembayaran baru telah diunggah.');
     }
 
-    /**
-     * Show cancel confirmation page
-     */
     public function cancelPage($kodeBooking)
     {
         $booking = PesananTiket::where('kode_booking', $kodeBooking)
@@ -145,15 +138,12 @@ class CheckoutController extends Controller
 
         if ($booking->status_pembayaran === 'cancelled') {
             return redirect()->route('checkout.index')
-                           ->with('error', 'Pesanan ini sudah dibatalkan sebelumnya!');
+                            ->with('error', 'Pesanan ini sudah dibatalkan sebelumnya!');
         }
 
         return view('pages.checkout.cancel', compact('booking'));
     }
 
-    /**
-     * Process booking cancellation with 70% refund
-     */
     public function cancelProcess(Request $request, $kodeBooking)
     {
         $validated = $request->validate([
@@ -166,13 +156,10 @@ class CheckoutController extends Controller
 
         if ($booking->status_pembayaran === 'cancelled') {
             return redirect()->route('checkout.index')
-                           ->with('error', 'Pesanan ini sudah dibatalkan sebelumnya!');
+                            ->with('error', 'Pesanan ini sudah dibatalkan sebelumnya!');
         }
 
-        // Hitung refund 70%
         $refund = $booking->hitungRefund();
-
-        // Update status pembatalan
         $booking->status_pembayaran = 'cancelled';
         $booking->alasan_pembatalan = $validated['reason'];
         $booking->jumlah_refund = $refund;
@@ -183,16 +170,12 @@ class CheckoutController extends Controller
                         ->with('success', 'Pesanan berhasil dibatalkan! Refund 70%: Rp ' . number_format($refund, 0, ',', '.'));
     }
 
-    /**
-     * Delete a booking (hard delete)
-     */
     public function destroy($kodeBooking)
     {
         $booking = PesananTiket::where('kode_booking', $kodeBooking)
                                ->byUser(Auth::id())
                                ->firstOrFail();
 
-        // Hapus file bukti pembayaran jika ada
         if ($booking->bukti_pembayaran) {
             Storage::disk('public')->delete($booking->bukti_pembayaran);
         }
@@ -203,18 +186,12 @@ class CheckoutController extends Controller
                         ->with('success', 'Pesanan berhasil dihapus!');
     }
 
-    /**
-     * Admin: Update booking status to success
-     */
     public function updateStatus($kodeBooking)
     {
         $booking = PesananTiket::where('kode_booking', $kodeBooking)->firstOrFail();
-
-        // Update status menjadi sukses
         $booking->status_pembayaran = 'success';
         $booking->save();
 
-        return redirect()->back()
-                        ->with('success', 'Status pesanan berhasil diubah menjadi sukses!');
+        return redirect()->back()->with('success', 'Status pesanan berhasil diubah menjadi sukses!');
     }
 }

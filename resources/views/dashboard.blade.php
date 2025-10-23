@@ -4,7 +4,7 @@
 @section('content')
 <div class="text-center">
     <h1 class="text-5xl font-extrabold text-green-900 drop-shadow-md">
-        Welcome to Pendakianku 🌄
+        Welcome to MyClimb
     </h1>
     <p class="mt-4 text-lg text-black-800/90 font-medium">
         Explore nature, book climbing tickets, and save your favorite mountains

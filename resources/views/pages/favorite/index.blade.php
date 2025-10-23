@@ -2,38 +2,33 @@
 @section('title', 'Gunung Favorit Saya')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-b from-green-50 to-white py-12">
+<div class="py-12">
     <div class="max-w-7xl mx-auto px-4">
         
-        {{-- Header --}}
         <div class="text-center mb-12">
             <h1 class="text-5xl font-[Playfair_Display] font-bold text-green-900 mb-4">
-                My Favorite Mountains 💚
+                My Favorite Mountains
             </h1>
             <p class="text-gray-600 text-lg">
                 Place to save your favorite mountains
             </p>
         </div>
 
-        {{-- Success Message --}}
         @if(session('success'))
         <div class="mb-8 max-w-2xl mx-auto bg-green-100 border-l-4 border-green-500 text-green-700 px-6 py-4 rounded-lg shadow-sm">
             <p class="font-medium">{{ session('success') }}</p>
         </div>
         @endif
 
-        {{-- Content --}}
         @if($favoritGunung->count() > 0)
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach($favoritGunung as $favorite)
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                {{-- Gambar Gunung --}}
                 <div class="relative h-56 overflow-hidden">
                     <img src="{{ asset('images/' . $favorite->gunung->gambar) }}" 
                          alt="{{ $favorite->gunung->nama_gunung }}"
                          class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
-                    
-                    {{-- Badge Level Kesulitan --}}
+                
                     <div class="absolute top-4 right-4">
                         @php
                             $badges = [
@@ -49,7 +44,6 @@
                     </div>
                 </div>
                 
-                {{-- Info Gunung --}}
                 <div class="p-6">
                     <h3 class="text-2xl font-bold text-green-900 mb-3 font-[Playfair_Display]">
                         {{ $favorite->gunung->nama_gunung }}
@@ -78,7 +72,6 @@
                         </p>
                     </div>
                     
-                    {{-- Action Buttons --}}
                     <div class="flex gap-3">
                         <a href="{{ route('mountain.show', $favorite->gunung->id) }}"
                            class="flex-1 bg-green-700 hover:bg-green-800 text-white text-center py-3 rounded-lg transition font-medium shadow-md hover:shadow-lg">
@@ -99,7 +92,6 @@
             @endforeach
         </div>
         @else
-        {{-- Empty State --}}
         <div class="text-center py-20">
             <div class="mb-8">
                 <svg class="w-32 h-32 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -114,7 +106,7 @@
             </p>
             <a href="{{ route('mountain.index') }}"
                class="inline-block bg-green-700 hover:bg-green-800 text-white px-8 py-4 rounded-full text-lg font-medium transition transform hover:scale-105 shadow-lg">
-                🏔️ Explore Mountains
+                Explore Mountains
             </a>
         </div>
         @endif
