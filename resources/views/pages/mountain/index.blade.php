@@ -8,19 +8,19 @@
         {{-- Header --}}
         <div class="text-center mb-12">
             <h1 class="text-5xl font-[Playfair_Display] font-bold text-green-900 mb-4">
-                Daftar Gunung 🏔️
+                Mountain List 🏔️
             </h1>
             <p class="text-gray-600 text-lg">
-                Temukan gunung yang ingin kamu jelajahi 🌿
+                Find the mountain you want to explore 🌿
             </p>
         </div>
 
         {{-- Search Bar --}}
         <div class="max-w-2xl mx-auto mb-12">
             <div class="relative">
-                <input type="text" 
+                <input type="text"
                        id="searchInput"
-                       placeholder="Cari gunung berdasarkan lokasi..." 
+                       placeholder="Search mountains by location..."
                        class="w-full px-6 py-4 rounded-full border-2 border-green-200 focus:border-green-500 focus:outline-none text-lg shadow-md">
                 <button class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-green-700 hover:bg-green-800 text-white p-3 rounded-full transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,9 +108,9 @@
                     
                     {{-- Action Buttons --}}
                     <div class="flex gap-3">
-                        <a href="{{ route('mountain.show', $gunung->id) }}" 
+                        <a href="{{ route('mountain.show', $gunung->id) }}"
                            class="flex-1 bg-green-700 hover:bg-green-800 text-white text-center py-3 rounded-lg transition font-medium shadow-md hover:shadow-lg">
-                            📖 Lihat Detail
+                            📖 View Details
                         </a>
                         
                         @auth
@@ -141,10 +141,10 @@
                 </svg>
             </div>
             <h2 class="text-3xl font-bold text-gray-700 mb-4 font-[Playfair_Display]">
-                Belum Ada Data Gunung
+                No Mountain Data Yet
             </h2>
             <p class="text-gray-500 text-lg">
-                Data gunung sedang dalam proses penambahan
+                Mountain data is being added
             </p>
         </div>
         @endif

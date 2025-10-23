@@ -6,7 +6,7 @@
     <!-- Header -->
     <div class="text-center mb-10">
         <h1 class="text-5xl font-[Playfair_Display] font-bold text-green-900 mb-3">Admin Dashboard</h1>
-        <p class="text-gray-600">Kelola data gunung dan pantau statistik pendakian</p>
+        <p class="text-gray-600">Manage mountain data and monitor climbing statistics</p>
     </div>
 
     <!-- Success Message -->
@@ -21,19 +21,19 @@
         <div class="bg-white rounded-2xl shadow-md p-6 border border-green-100">
             <div class="text-center">
                 <h3 class="text-2xl font-bold text-green-900">{{ $totalGunung }}</h3>
-                <p class="text-gray-600 mt-2">Total Gunung</p>
+                <p class="text-gray-600 mt-2">Total Mountains</p>
             </div>
         </div>
         <div class="bg-white rounded-2xl shadow-md p-6 border border-green-100">
             <div class="text-center">
                 <h3 class="text-2xl font-bold text-green-900">{{ $gunungAktif }}</h3>
-                <p class="text-gray-600 mt-2">Gunung Aktif</p>
+                <p class="text-gray-600 mt-2">Active Mountains</p>
             </div>
         </div>
         <div class="bg-white rounded-2xl shadow-md p-6 border border-green-100">
             <div class="text-center">
                 <h3 class="text-2xl font-bold text-green-900">{{ $totalBookings }}</h3>
-                <p class="text-gray-600 mt-2">Total Booking</p>
+                <p class="text-gray-600 mt-2">Total Bookings</p>
             </div>
         </div>
         <div class="bg-white rounded-2xl shadow-md p-6 border border-green-100">
@@ -53,13 +53,13 @@
                 <table class="w-full">
                     <thead class="bg-green-50">
                         <tr>
-                            <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Kode Booking</th>
-                            <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Nama Pendaki</th>
-                            <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Gunung</th>
-                            <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Tanggal</th>
-                            <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Total Harga</th>
-                            <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Bukti Bayar</th>
-                            <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Aksi</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Booking Code</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Climber Name</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Mountain</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Date</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Total Price</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Payment Proof</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-green-900">Action</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
@@ -75,18 +75,18 @@
                                     <a href="{{ asset('storage/' . $booking->bukti_pembayaran) }}"
                                        target="_blank"
                                        class="text-blue-600 hover:text-blue-800 underline">
-                                        Lihat Bukti
+                                        View Proof
                                     </a>
                                 @else
-                                    <span class="text-gray-500">Tidak ada</span>
+                                    <span class="text-gray-500">None</span>
                                 @endif
                             </td>
                             <td class="px-4 py-3 text-sm">
                                 <form method="POST" action="{{ route('admin.checkout.update-status', $booking->kode_booking) }}" class="inline">
                                     @csrf
                                     <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs"
-                                            onclick="return confirm('Apakah Anda yakin ingin menyetujui pembayaran ini?')">
-                                        Setujui
+                                            onclick="return confirm('Are you sure you want to approve this payment?')">
+                                        Approve
                                     </button>
                                 </form>
                             </td>
@@ -104,11 +104,11 @@
     <div class="text-center space-y-4 md:space-y-0 md:space-x-4">
         <a href="{{ route('admin.gunungs.create') }}"
            class="bg-green-700 hover:bg-green-800 text-white px-8 py-3 rounded-full text-lg shadow-md transition transform hover:scale-105 inline-block">
-            + Tambah Gunung Baru
+            + Add New Mountain
         </a>
         <a href="{{ route('mountain.index') }}"
            class="bg-white border border-green-700 text-green-700 hover:bg-green-50 px-8 py-3 rounded-full text-lg shadow-sm transition inline-block">
-            Lihat Daftar Gunung
+            View Mountain List
         </a>
     </div>
 </div>

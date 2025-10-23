@@ -10,7 +10,7 @@
     @endif
 
     @if(empty($history))
-        <p class="text-gray-500 text-center">No past bookings.</p>
+        <p class="text-gray-500 text-center">No past bookings found.</p>
     @else
         <table class="w-full border border-gray-300 rounded-lg">
             <thead class="bg-green-700 text-white">
@@ -51,7 +51,7 @@
                         @if($booking['status'] === 'Cancelled')
                             Cancelled because {{ $booking['reason'] ?? 'no reason provided' }}
                         @elseif($booking['status'] === 'Completed')
-                            Climbing done
+                            Climbing completed
                         @elseif($booking['status'] === 'Expired')
                             -
                         @else

@@ -5,11 +5,11 @@
         <div>
             @auth
                 <a href="{{ route('dashboard') }}" class="text-2xl font-bold text-green-800 flex items-center gap-1">
-                    🌿 <span>Pendakianku</span>
+                    🌿 <span>MyClimb</span>
                 </a>
             @else
                 <a href="{{ route('landing') }}" class="text-2xl font-bold text-green-800 flex items-center gap-1">
-                    🌿 <span>Pendakianku</span>
+                    🌿 <span>MyClimb</span>
                 </a>
             @endauth
         </div>
@@ -48,15 +48,15 @@
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button class="bg-green-700 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-green-800 transition">
-                        Keluar
+                        Logout
                     </button>
                 </form>
             @else
                 <div class="flex gap-4 items-center">
-                    <a href="{{ route('login') }}" class="text-green-800 hover:underline font-medium">Masuk</a>
-                    <a href="{{ route('register') }}" 
+                    <a href="{{ route('login') }}" class="text-green-800 hover:underline font-medium">Login</a>
+                    <a href="{{ route('register') }}"
                        class="bg-green-700 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-green-800 transition">
-                       Daftar
+                       Register
                     </a>
                 </div>
             @endauth

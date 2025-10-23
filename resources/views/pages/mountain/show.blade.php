@@ -25,31 +25,31 @@
     @endif
 
     <div class="flex justify-center gap-6 mb-10">
-        <a href="{{ route('checkout.create') }}" 
+        <a href="{{ route('checkout.create') }}"
            class="bg-green-700 hover:bg-green-800 text-white px-6 py-3 rounded-full text-lg shadow-md transition transform hover:scale-105">
-            Pesan Tiket 🎫
+            Book Ticket 🎫
         </a>
-        
+
         {{-- Button Favorite dengan Toggle --}}
         <form action="{{ route('favorite.toggle', $gunung->id) }}" method="POST">
             @csrf
             @php
                 $isFavorited = auth()->user()->hasFavorited($gunung->id);
             @endphp
-            <button type="submit" 
+            <button type="submit"
                     class="border-2 px-6 py-3 rounded-full text-lg shadow-sm transition transform hover:scale-105
-                    {{ $isFavorited 
-                        ? 'border-red-500 text-red-500 bg-white hover:bg-red-50' 
+                    {{ $isFavorited
+                        ? 'border-red-500 text-red-500 bg-white hover:bg-red-50'
                         : 'border-green-700 text-green-700 bg-white hover:bg-green-50' }}">
-                {{ $isFavorited ? 'Hapus dari Favorit 💔' : 'Tambahkan ke Favorit 💚' }}
+                {{ $isFavorited ? 'Remove from Favorites 💔' : 'Add to Favorites 💚' }}
             </button>
         </form>
     </div>
 
     <div class="text-center">
-        <a href="{{ route('mountain.index') }}" 
+        <a href="{{ route('mountain.index') }}"
            class="text-green-700 hover:underline font-medium text-sm">
-           ← Kembali ke Daftar Gunung
+           ← Back to Mountain List
         </a>
     </div>
 </div>

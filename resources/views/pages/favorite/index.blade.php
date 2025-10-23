@@ -8,10 +8,10 @@
         {{-- Header --}}
         <div class="text-center mb-12">
             <h1 class="text-5xl font-[Playfair_Display] font-bold text-green-900 mb-4">
-                Gunung Favorit Saya 💚
+                My Favorite Mountains 💚
             </h1>
             <p class="text-gray-600 text-lg">
-                Tempat menyimpan gunung yang paling kamu sukai
+                Place to save your favorite mountains
             </p>
         </div>
 
@@ -80,16 +80,16 @@
                     
                     {{-- Action Buttons --}}
                     <div class="flex gap-3">
-                        <a href="{{ route('mountain.show', $favorite->gunung->id) }}" 
+                        <a href="{{ route('mountain.show', $favorite->gunung->id) }}"
                            class="flex-1 bg-green-700 hover:bg-green-800 text-white text-center py-3 rounded-lg transition font-medium shadow-md hover:shadow-lg">
-                            📖 Lihat Detail
+                            📖 View Details
                         </a>
-                        
+
                         <form action="{{ route('favorite.toggle', $favorite->gunung->id) }}" method="POST" class="inline">
                             @csrf
-                            <button type="submit" 
+                            <button type="submit"
                                     class="bg-red-500 hover:bg-red-600 text-white px-5 py-3 rounded-lg transition font-medium shadow-md hover:shadow-lg"
-                                    title="Hapus dari favorit">
+                                    title="Remove from favorites">
                                 💔
                             </button>
                         </form>
@@ -107,14 +107,14 @@
                 </svg>
             </div>
             <h2 class="text-3xl font-bold text-gray-700 mb-4 font-[Playfair_Display]">
-                Belum Ada Gunung Favorit
+                No Favorite Mountains Yet
             </h2>
             <p class="text-gray-500 text-lg mb-8">
-                Mulai jelajahi gunung-gunung indah dan tambahkan yang kamu suka!
+                Start exploring beautiful mountains and add your favorites!
             </p>
-            <a href="{{ route('mountain.index') }}" 
+            <a href="{{ route('mountain.index') }}"
                class="inline-block bg-green-700 hover:bg-green-800 text-white px-8 py-4 rounded-full text-lg font-medium transition transform hover:scale-105 shadow-lg">
-                🏔️ Jelajahi Gunung
+                🏔️ Explore Mountains
             </a>
         </div>
         @endif

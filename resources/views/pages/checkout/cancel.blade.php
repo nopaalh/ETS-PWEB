@@ -1,27 +1,27 @@
 @extends('layouts.app')
 
+@section('title', 'Cancel Booking')
+
 @section('content')
-<div class="max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow">
-    <h2 class="text-2xl font-bold mb-4 text-center">Cancel Booking</h2>
+<div class="max-w-2xl mx-auto py-10">
+    <h1 class="text-3xl font-bold text-center text-red-600 mb-6">Cancel Booking</h1>
 
-    <p><strong>Mountain:</strong> {{ $order['mountain'] }}</p>
-    <p><strong>Price:</strong> Rp{{ number_format($order['price']) }}</p>
-
-    <form action="{{ url('/create/' . $order['id'] . '/cancel') }}" method="POST">
-        @csrf
-        <label class="block mt-4 mb-2 font-medium">Reason for Cancellation</label>
-        <textarea name="reason" class="w-full border rounded p-2" required></textarea>
-
-        <p class="mt-4 text-sm text-gray-600">
-            Refund amount: <strong class="text-green-600">Rp{{ number_format($order['price'] * 0.7) }}</strong> (70%)
+    <div class="bg-white p-6 rounded-xl shadow">
+        <p class="mb-4">Booking Code: <strong>{{ $tiket->kode_booking }}</strong></p>
+        <p class="mb-4 text-gray-700">Refund amount to be received:
+            <strong>Rp{{ number_format($tiket->hitungRefund(), 0, ',', '.') }}</strong>
         </p>
 
-        <div class="mt-6 flex justify-between">
-            <a href="{{ url('/create') }}" class="text-gray-500">Back</a>
-            <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
-                Confirm Cancellation
-            </button>
-        </div>
-    </form>
+        <form action="{{ route('checkout.cancel.process', $tiket->kode_booking) }}" method="POST">
+            @csrf
+            <label class="block font-semibold mb-2">Cancellation Reason</label>
+            <textarea name="alasan_pembatalan" class="w-full border rounded p-2 mb-4" rows="4" required></textarea>
+
+            <div class="flex justify-end gap-3">
+                <a href="{{ route('checkout.index') }}" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">Cancel</a>
+                <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Submit Cancellation</button>
+            </div>
+        </form>
+    </div>
 </div>
 @endsection

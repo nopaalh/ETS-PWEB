@@ -7,7 +7,7 @@
 
     <a href="{{ route('checkout.create') }}"
        class="mb-4 inline-block bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-        + Create a New Order
+        + Create New Booking
     </a>
 
     @if(session('success'))
@@ -15,16 +15,16 @@
     @endif
 
     @if(empty($bookings))
-        <p class="text-gray-500 text-center">No bookings yet.</p>
+        <p class="text-gray-500 text-center">No bookings found.</p>
     @else
         <table class="w-full border border-gray-300 rounded-lg">
             <thead class="bg-green-700 text-white">
                 <tr>
-                    <th class="p-2">Code</th>
-                    <th class="p-2">Name</th>
-                    <th class="p-2">Date</th>
-                    <th class="p-2">Status</th>
-                    <th class="p-2">Refund</th>
+                    <th class="p-2">Booking Code</th>
+                    <th class="p-2">Climber Name</th>
+                    <th class="p-2">Climbing Date</th>
+                    <th class="p-2">Payment Status</th>
+                    <th class="p-2">Refund Amount</th>
                     <th class="p-2">Actions</th>
                 </tr>
             </thead>
