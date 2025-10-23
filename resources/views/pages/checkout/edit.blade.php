@@ -5,27 +5,28 @@
 <div class="max-w-3xl mx-auto bg-white shadow-lg p-8 rounded-xl">
     <h2 class="text-3xl font-bold text-center text-green-800 mb-6">Edit Booking</h2>
 
-    <form action="{{ route('checkout.update', $booking['code']) }}" method="POST">
+    <form action="{{ route('checkout.update', $booking->kode_booking) }}" method="POST">
         @csrf
+        @method('PUT')
 
         <div class="mb-4">
             <label class="block font-medium">Full Name</label>
-            <input type="text" name="name" value="{{ $booking['name'] }}" class="w-full border rounded p-2">
+            <input type="text" name="name" value="{{ $booking->nama_pendaki }}" class="w-full border rounded p-2" readonly>
         </div>
 
         <div class="mb-4">
             <label class="block font-medium">Climbing Date</label>
-            <input type="date" name="date" value="{{ $booking['date'] }}" class="w-full border rounded p-2">
+            <input type="date" name="date" value="{{ $booking->tanggal_pendakian->format('Y-m-d') }}" class="w-full border rounded p-2" min="{{ now()->addDay()->format('Y-m-d') }}">
         </div>
 
         <div class="mb-4">
             <label class="block font-medium">Number of Climbers</label>
-            <input type="number" name="climber" value="{{ $booking['climber'] }}" class="w-full border rounded p-2">
+            <input type="number" name="climber" value="{{ $booking->jumlah_pendaki }}" class="w-full border rounded p-2" readonly>
         </div>
 
         <div class="mb-4">
             <label class="block font-medium">Duration (days)</label>
-            <input type="number" name="duration" value="{{ $booking['duration'] }}" class="w-full border rounded p-2">
+            <input type="number" name="duration" value="{{ $booking->durasi_hari }}" class="w-full border rounded p-2" readonly>
         </div>
 
         <div class="text-center">

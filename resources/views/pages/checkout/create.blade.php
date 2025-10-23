@@ -1,119 +1,101 @@
 @extends('layouts.app')
-@section('title', 'Create Ticket Booking')
 
 @section('content')
-<div class="max-w-3xl mx-auto bg-white shadow-lg p-8 rounded-xl">
-    <h2 class="text-3xl font-bold text-center text-green-800 mb-6">Climbing Ticket Booking</h2>
+<div class="container py-5">
+    <h2 class="text-2xl font-bold mb-4 text-green-700">Ticket Checkout</h2>
 
-    <form action="{{ route('checkout.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('checkout.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md">
         @csrf
 
-        <div class="mb-8">
-            <h3 class="text-xl font-semibold text-green-700 mb-3">Climber Data</h3>
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block mb-1 font-medium">Full Name <span class="text-red-500">*</span></label>
-                    <input type="text" name="name" value="{{ old('name') }}" 
-                        class="w-full border rounded p-2 @error('name') border-red-500 @enderror" 
-                        placeholder="Climber name">
-                    @error('name') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-                </div>
+        {{-- Climber Data --}}
+        <h4 class="text-lg font-semibold text-green-800 mb-3">Climber Data</h4>
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium">Full Name *</label>
+                <input type="text" name="name" value="{{ old('name') }}" class="w-full border rounded-lg p-2">
+                @error('name') <small class="text-red-600">{{ $message }}</small> @enderror
+            </div>
+            <div>
+                <label class="block text-sm font-medium">Identity Number (KTP) *</label>
+                <input type="text" name="ktp" value="{{ old('ktp') }}" class="w-full border rounded-lg p-2">
+                @error('ktp') <small class="text-red-600">{{ $message }}</small> @enderror
+            </div>
 
-                <div>
-                    <label class="block mb-1 font-medium">Identity Number (KTP) <span class="text-red-500">*</span></label>
-                    <input type="text" name="ktp" value="{{ old('ktp') }}" 
-                        class="w-full border rounded p-2 @error('ktp') border-red-500 @enderror" 
-                        placeholder="Number KTP">
-                    @error('ktp') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-                </div>
-
-                <div>
-                    <label class="block mb-1 font-medium">Phone Number <span class="text-red-500">*</span></label>
-                    <input type="text" name="phone" value="{{ old('phone') }}" 
-                        class="w-full border rounded p-2 @error('phone') border-red-500 @enderror" 
-                        placeholder="08xxxxxxxxxx">
-                    @error('phone') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-                </div>
-
-                <div>
-                    <label class="block mb-1 font-medium">Email <span class="text-red-500">*</span></label>
-                    <input type="email" name="email" value="{{ old('email') }}" 
-                        class="w-full border rounded p-2 @error('email') border-red-500 @enderror" 
-                        placeholder="email@example.com">
-                    @error('email') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-                </div>
+            <div>
+                <label class="block text-sm font-medium">Phone Number *</label>
+                <input type="text" name="phone" value="{{ old('phone') }}" class="w-full border rounded-lg p-2">
+                @error('phone') <small class="text-red-600">{{ $message }}</small> @enderror
+            </div>
+            <div>
+                <label class="block text-sm font-medium">Email *</label>
+                <input type="email" name="email" value="{{ old('email') }}" class="w-full border rounded-lg p-2">
+                @error('email') <small class="text-red-600">{{ $message }}</small> @enderror
             </div>
         </div>
 
-        <div class="mb-8">
-            <h3 class="text-xl font-semibold text-green-700 mb-3">Climbing Data</h3>
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block mb-1 font-medium">Choose Mountain <span class="text-red-500">*</span></label>
-                    <select name="mountain_id" class="w-full border rounded p-2 @error('mountain_id') border-red-500 @enderror">
-                        <option value="">-- Choose Mountain --</option>
-                        <option value="1" {{ old('mountain_id') == 1 ? 'selected' : '' }}>Mt. Bromo</option>
-                        <option value="2" {{ old('mountain_id') == 2 ? 'selected' : '' }}>Mt. Rinjani</option>
-                        <option value="3" {{ old('mountain_id') == 3 ? 'selected' : '' }}>Mt. Semeru</option>
-                    </select>
-                    @error('mountain_id') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-                </div>
+        {{-- Climbing Data --}}
+        <h4 class="text-lg font-semibold text-green-800 mt-6 mb-3">Climbing Data</h4>
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium">Choose Mountain *</label>
+                <select name="mountain_id" class="w-full border rounded-lg p-2">
+                    <option value="">-- Choose Mountain --</option>
+                    @foreach ($gunungs as $g)
+                        <option value="{{ $g->id }}" {{ old('mountain_id') == $g->id ? 'selected' : '' }}>
+                            {{ $g->nama_gunung }} - Rp {{ number_format($g->harga_tiket, 0, ',', '.') }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('mountain_id') <small class="text-red-600">{{ $message }}</small> @enderror
+            </div>
 
-                <div>
-                    <label class="block mb-1 font-medium">Climbing Date <span class="text-red-500">*</span></label>
-                    <input type="date" name="date" value="{{ old('date') }}" 
-                        class="w-full border rounded p-2 @error('date') border-red-500 @enderror">
-                    @error('date') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-                </div>
+            <div>
+                <label class="block text-sm font-medium">Climbing Date *</label>
+                <input type="date" name="date" value="{{ old('date') }}" class="w-full border rounded-lg p-2" min="{{ now()->addDay()->format('Y-m-d') }}">
+                @error('date') <small class="text-red-600">{{ $message }}</small> @enderror
+            </div>
 
-                <div>
-                    <label class="block mb-1 font-medium">Number of Climbers <span class="text-red-500">*</span></label>
-                    <input type="number" name="climber" value="{{ old('climber') }}" min="1"
-                        class="w-full border rounded p-2 @error('climber') border-red-500 @enderror" 
-                        placeholder="Number of People">
-                    @error('climber') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-                </div>
+            <div>
+                <label class="block text-sm font-medium">Number of Climbers *</label>
+                <input type="number" name="climber" min="1" value="{{ old('climber') }}" class="w-full border rounded-lg p-2">
+                @error('climber') <small class="text-red-600">{{ $message }}</small> @enderror
+            </div>
 
-                <div>
-                    <label class="block mb-1 font-medium">Climbing Duration (day) <span class="text-red-500">*</span></label>
-                    <input type="number" name="duration" value="{{ old('duration') }}" min="1"
-                        class="w-full border rounded p-2 @error('duration') border-red-500 @enderror" 
-                        placeholder="Example: 3">
-                    @error('duration') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-                </div>
+            <div>
+                <label class="block text-sm font-medium">Climbing Duration (days) *</label>
+                <input type="number" name="duration" min="1" value="{{ old('duration') }}" class="w-full border rounded-lg p-2">
+                @error('duration') <small class="text-red-600">{{ $message }}</small> @enderror
             </div>
         </div>
 
-        <div class="mb-8">
-            <h3 class="text-xl font-semibold text-green-700 mb-3">Payment</h3>
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block mb-1 font-medium">Payment Method <span class="text-red-500">*</span></label>
-                    <select name="metode" class="w-full border rounded p-2 @error('metode') border-red-500 @enderror">
-                        <option value="">-- Choose Method --</option>
-                        <option value="transfer" {{ old('metode') == 'transfer' ? 'selected' : '' }}>Transfer Bank</option>
-                        <option value="ewallet" {{ old('metode') == 'ewallet' ? 'selected' : '' }}>E-Wallet (Dana/OVO/Gopay)</option>
-                    </select>
-                    @error('metode') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-                </div>
+        {{-- Payment Data --}}
+        <h4 class="text-lg font-semibold text-green-800 mt-6 mb-3">Payment</h4>
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium">Payment Method *</label>
+                <select name="metode" class="w-full border rounded-lg p-2">
+                    <option value="">-- Choose Bank --</option>
+                    <option value="BCA" {{ old('metode') == 'BCA' ? 'selected' : '' }}>BCA</option>
+                    <option value="BRI" {{ old('metode') == 'BRI' ? 'selected' : '' }}>BRI</option>
+                </select>
+                @error('metode') <small class="text-red-600">{{ $message }}</small> @enderror
+            </div>
 
-                <div>
-                    <label class="block mb-1 font-medium">Payment Amount <span class="text-red-500">*</span></label>
-                    <input type="number" name="amount" value="{{ old('amount') }}"
-                        class="w-full border rounded p-2 @error('amount') border-red-500 @enderror" placeholder="Rp">
-                    @error('amount') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-                </div>
+            <div>
+                <label class="block text-sm font-medium">Payment Amount (Rp) *</label>
+                <input type="number" name="amount" min="0" value="{{ old('amount') }}" class="w-full border rounded-lg p-2">
+                @error('amount') <small class="text-red-600">{{ $message }}</small> @enderror
+            </div>
 
-                <div class="col-span-2">
-                    <label class="block mb-1 font-medium">Upload Proof of Payment <span class="text-red-500">*</span></label>
-                    <input type="file" name="proof" class="w-full border rounded p-2 @error('proof') border-red-500 @enderror">
-                    @error('proof') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-                </div>
+            <div class="col-span-2">
+                <label class="block text-sm font-medium">Upload Proof of Payment *</label>
+                <input type="file" name="proof" class="w-full border rounded-lg p-2">
+                @error('proof') <small class="text-red-600">{{ $message }}</small> @enderror
             </div>
         </div>
 
-        <div class="text-center">
-            <button type="submit" class="bg-green-700 text-white px-6 py-2 rounded-lg hover:bg-green-800">
+        <div class="mt-6 text-center">
+            <button type="submit" class="bg-green-700 hover:bg-green-800 text-white px-6 py-2 rounded-lg">
                 Send Order
             </button>
         </div>
