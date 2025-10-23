@@ -77,7 +77,6 @@
                     <option value="">-- Select Bank --</option>
                     <option value="BCA" {{ old('metode') == 'BCA' ? 'selected' : '' }}>BCA - 1234567890 (a.n. Nashwa Umi Setiawan)</option>
                     <option value="BRI" {{ old('metode') == 'BRI' ? 'selected' : '' }}>BRI - 0987654321 (a.n. Nashwa Umi Setiawan)</option>
-                    <option value="Mandiri" {{ old('metode') == 'Mandiri' ? 'selected' : '' }}>Mandiri - 1122334455 (a.n. Nashwa Umi Setiawan)</option>
                 </select>
                 @error('metode') <small class="text-red-600">{{ $message }}</small> @enderror
             </div>
@@ -129,13 +128,10 @@ function showBankInfo() {
 
     switch(metode) {
         case 'BCA':
-            info = 'Silakan transfer ke rekening BCA 1234567890 a.n. Nashwa Umi Setiawan';
+            info = 'Please transfer to this Bank Account BCA 1234567890 a.n. Nashwa Umi Setiawan';
             break;
         case 'BRI':
-            info = 'Silakan transfer ke rekening BRI 0987654321 a.n. Nashwa Umi Setiawan';
-            break;
-        case 'Mandiri':
-            info = 'Silakan transfer ke rekening Mandiri 1122334455 a.n. Nashwa Umi Setiawan';
+            info = 'Please transfer to this Bank Account BRI 0987654321 a.n. Nashwa Umi Setiawan';
             break;
     }
 
