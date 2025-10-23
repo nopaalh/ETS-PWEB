@@ -39,14 +39,14 @@
         <div class="bg-white rounded-2xl shadow-md p-6 border border-green-100">
             <div class="text-center">
                 <h3 class="text-2xl font-bold text-green-900">{{ $pendingBookings }}</h3>
-                <p class="text-gray-600 mt-2">Booking Menunggu</p>
+                <p class="text-gray-600 mt-2">Pending Bookings</p>
             </div>
         </div>
     </div>
 
     <!-- Pending Bookings Table -->
     <div class="bg-white rounded-2xl shadow-md p-6 mb-10">
-        <h2 class="text-2xl font-bold text-green-900 mb-6">Transaksi Menunggu Konfirmasi</h2>
+        <h2 class="text-2xl font-bold text-green-900 mb-6">Pending Transactions</h2>
 
         @if($pendingBookingsList->count() > 0)
             <div class="overflow-x-auto">
@@ -96,7 +96,7 @@
                 </table>
             </div>
         @else
-            <p class="text-gray-500 text-center py-8">Tidak ada transaksi yang menunggu konfirmasi.</p>
+            <p class="text-gray-500 text-center py-8">No pending transactions.</p>
         @endif
     </div>
 

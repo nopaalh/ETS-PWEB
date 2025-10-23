@@ -34,7 +34,7 @@
                     <td class="p-2">{{ $booking->kode_booking }}</td>
                     <td class="p-2">{{ $booking->nama_pendaki }}</td>
                     <td class="p-2">{{ $booking->tanggal_pendakian->format('d/m/Y') }}</td>
-                    <td class="p-2 {{ $booking->status_pembayaran == 'dibatalkan' ? 'text-red-600' : 'text-green-700' }}">
+                    <td class="p-2 {{ $booking->status_pembayaran == 'cancelled' ? 'text-red-600' : 'text-green-700' }}">
                         {{ ucfirst($booking->status_pembayaran) }}
                     </td>
                     <td class="p-2">
@@ -45,7 +45,7 @@
                         @endif
                     </td>
                     <td class="p-2 flex gap-2 justify-center">
-                        @if($booking->status_pembayaran !== 'dibatalkan')
+                        @if($booking->status_pembayaran !== 'cancelled')
                         <a href="{{ route('checkout.edit', $booking->kode_booking) }}"
                            class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">
                             Edit

@@ -29,7 +29,7 @@ return new class extends Migration
             $table->enum('metode_pembayaran', ['BCA', 'BRI']);
             $table->decimal('total_harga', 15, 2);
             $table->string('bukti_pembayaran')->nullable(); // path file
-            $table->enum('status_pembayaran', ['menunggu', 'berhasil', 'dibatalkan'])->default('menunggu');
+            $table->enum('status_pembayaran', ['pending', 'success', 'cancelled'])->default('pending');
             
             // Pembatalan
             $table->text('alasan_pembatalan')->nullable();

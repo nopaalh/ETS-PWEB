@@ -117,8 +117,8 @@ class GunungController extends Controller
         $totalGunung = Gunung::count();
         $gunungAktif = Gunung::where('status', 'active')->count();
         $totalBookings = PesananTiket::count();
-        $pendingBookings = PesananTiket::where('status_pembayaran', 'menunggu')->count();
-        $pendingBookingsList = PesananTiket::where('status_pembayaran', 'menunggu')
+        $pendingBookings = PesananTiket::where('status_pembayaran', 'pending')->count();
+        $pendingBookingsList = PesananTiket::where('status_pembayaran', 'pending')
             ->with('gunung')
             ->orderBy('created_at', 'desc')
             ->get();

@@ -74,7 +74,7 @@ class CheckoutController extends Controller
         $pesanan->metode_pembayaran = $validated['metode'];
         $pesanan->total_harga = $validated['amount'];
         $pesanan->bukti_pembayaran = $buktiPath;
-        $pesanan->status_pembayaran = 'menunggu';
+        $pesanan->status_pembayaran = 'pending';
         $pesanan->save();
 
         return redirect()->route('checkout.success', $pesanan->kode_booking)
@@ -104,7 +104,7 @@ class CheckoutController extends Controller
                                ->firstOrFail();
 
         // Cek apakah masih bisa diedit (belum dibatalkan)
-        if ($booking->status_pembayaran === 'dibatalkan') {
+        if ($booking->status_pembayaran === 'cancelled') {
             return redirect()->route('checkout.index')
                            ->with('error', 'Pesanan yang sudah dibatalkan tidak bisa diedit!');
         }
@@ -143,7 +143,7 @@ class CheckoutController extends Controller
                                ->with('gunung')
                                ->firstOrFail();
 
-        if ($booking->status_pembayaran === 'dibatalkan') {
+        if ($booking->status_pembayaran === 'cancelled') {
             return redirect()->route('checkout.index')
                            ->with('error', 'Pesanan ini sudah dibatalkan sebelumnya!');
         }
@@ -164,7 +164,7 @@ class CheckoutController extends Controller
                                ->byUser(Auth::id())
                                ->firstOrFail();
 
-        if ($booking->status_pembayaran === 'dibatalkan') {
+        if ($booking->status_pembayaran === 'cancelled') {
             return redirect()->route('checkout.index')
                            ->with('error', 'Pesanan ini sudah dibatalkan sebelumnya!');
         }
@@ -173,7 +173,7 @@ class CheckoutController extends Controller
         $refund = $booking->hitungRefund();
 
         // Update status pembatalan
-        $booking->status_pembayaran = 'dibatalkan';
+        $booking->status_pembayaran = 'cancelled';
         $booking->alasan_pembatalan = $validated['reason'];
         $booking->jumlah_refund = $refund;
         $booking->tanggal_pembatalan = Carbon::now();
@@ -211,7 +211,7 @@ class CheckoutController extends Controller
         $booking = PesananTiket::where('kode_booking', $kodeBooking)->firstOrFail();
 
         // Update status menjadi sukses
-        $booking->status_pembayaran = 'sukses';
+        $booking->status_pembayaran = 'success';
         $booking->save();
 
         return redirect()->back()
