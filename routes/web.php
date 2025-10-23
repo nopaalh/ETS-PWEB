@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GunungController;
-use App\Http\Controllers\PesananTiketController;
 use App\Http\Controllers\FavoriteController;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -47,12 +46,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     */
     Route::view('/history', 'pages.history.index')->name('history.index');
 
-    /*
-    |--------------------------------------------------------------------------
-    | 🎟️ PESANAN TIKET ROUTES
-    |--------------------------------------------------------------------------
-    */
-    Route::resource('pesanan', PesananTiketController::class);
+
 
     /*
     |--------------------------------------------------------------------------
