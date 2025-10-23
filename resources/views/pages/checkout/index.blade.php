@@ -34,7 +34,7 @@
                     <td class="p-2">{{ $booking['code'] }}</td>
                     <td class="p-2">{{ $booking['name'] }}</td>
                     <td class="p-2">{{ $booking['date'] }}</td>
-                    <td class="p-2 {{ $booking['status'] == 'Canceled' ? 'text-red-600' : 'text-green-700' }}">
+                    <td class="p-2 {{ $booking['status'] == 'Cancelled' ? 'text-red-600' : 'text-green-700' }}">
                         {{ $booking['status'] }}
                     </td>
                     <td class="p-2">
@@ -45,11 +45,14 @@
                         @endif
                     </td>
                     <td class="p-2 flex gap-2 justify-center">
-                        @if($booking['status'] !== 'Canceled')
-                        <a href="{{ route('checkout.edit', $booking['code']) }}" 
-                           class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">
-                            Edit
+                        {{-- Detail --}}
+                        <a href="{{ route('checkout.show', $booking['code']) }}" 
+                           class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
+                            Detail
                         </a>
+
+                        {{-- Edit & Cancel muncul hanya kalau belum dibatalkan --}}
+                        @if($booking['status'] !== 'Cancelled')
                         <button onclick="openCancel('{{ $booking['code'] }}')" 
                                 class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
                             Cancel
@@ -72,7 +75,7 @@
             <textarea name="reason" rows="3" class="w-full border rounded p-2 mb-3" 
                       placeholder="Reason for cancellation..." required></textarea>
             <div class="flex justify-end gap-2">
-                <button type="button" onclick="closeCancel()" class="px-3 py-1 border rounded">Cancelled</button>
+                <button type="button" onclick="closeCancel()" class="px-3 py-1 border rounded">Close</button>
                 <button type="submit" class="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700">
                     Confirm
                 </button>
