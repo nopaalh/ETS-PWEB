@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Gunung;
+use App\Models\PesananTiket;
 use Illuminate\Http\Request;
 
 class GunungController extends Controller
@@ -115,7 +116,13 @@ class GunungController extends Controller
     {
         $totalGunung = Gunung::count();
         $gunungAktif = Gunung::where('status', 'active')->count();
+        $totalBookings = PesananTiket::count();
+        $pendingBookings = PesananTiket::where('status_pembayaran', 'menunggu')->count();
+        $recentBookings = PesananTiket::with('gunung')
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get();
 
-        return view('admin.dashboard', compact('totalGunung', 'gunungAktif'));
+        return view('admin.dashboard', compact('totalGunung', 'gunungAktif', 'totalBookings', 'pendingBookings', 'recentBookings'));
     }
 }

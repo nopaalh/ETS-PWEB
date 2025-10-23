@@ -202,4 +202,19 @@ class CheckoutController extends Controller
         return redirect()->route('checkout.index')
                         ->with('success', 'Pesanan berhasil dihapus!');
     }
+
+    /**
+     * Admin: Update booking status to success
+     */
+    public function updateStatus($kodeBooking)
+    {
+        $booking = PesananTiket::where('kode_booking', $kodeBooking)->firstOrFail();
+
+        // Update status menjadi sukses
+        $booking->status_pembayaran = 'sukses';
+        $booking->save();
+
+        return redirect()->back()
+                        ->with('success', 'Status pesanan berhasil diubah menjadi sukses!');
+    }
 }

@@ -80,6 +80,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/admin/gunungs/{gunung}', [GunungController::class, 'update'])->name('admin.gunungs.update');
         Route::delete('/admin/gunungs/{gunung}', [GunungController::class, 'destroy'])->name('admin.gunungs.destroy');
         Route::get('/admin/dashboard', [GunungController::class, 'dashboard'])->name('admin.dashboard');
+
+        // Admin checkout management
+        Route::post('/admin/checkout/update-status/{kodeBooking}', [CheckoutController::class, 'updateStatus'])->name('admin.checkout.update-status');
     });
 });
 
